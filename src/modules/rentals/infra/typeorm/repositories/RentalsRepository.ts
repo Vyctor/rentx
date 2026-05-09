@@ -1,18 +1,19 @@
-import { Repository, getRepository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { ICretateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalsRepository } from '@modules/rentals/repositories/IRentalsRepository';
+import { AppDataSource } from '@shared/infra/typeorm';
 
 class RentalsRepository implements IRentalsRepository {
   private repository: Repository<Rental>;
 
   constructor() {
-    this.repository = getRepository(Rental);
+    this.repository = AppDataSource.getRepository(Rental);
   }
 
-  async findById(car_id: string): Promise<Rental> {
-    return this.repository.findOne({ car_id });
+  async findById(id: string): Promise<Rental | null> {
+    return this.repository.findOne({ where: { id } });
   }
 
   async findByUser(user_id: string): Promise<Array<Rental>> {
@@ -22,12 +23,12 @@ class RentalsRepository implements IRentalsRepository {
     });
   }
 
-  async findOpenRentalByCar(car_id: string): Promise<Rental> {
+  async findOpenRentalByCar(car_id: string): Promise<Rental | null> {
     return this.repository.findOne({
       where: { car_id, end_date: null },
     });
   }
-  async findOpenRentalByUser(user_id: string): Promise<Rental> {
+  async findOpenRentalByUser(user_id: string): Promise<Rental | null> {
     return this.repository.findOne({
       where: { user_id, end_date: null },
     });

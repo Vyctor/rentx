@@ -10,7 +10,7 @@ class DevolutionRentalController {
     const devolutionRentalUseCase = container.resolve(DevolutionRentalUseCase);
 
     const rental = devolutionRentalUseCase.execute({
-      id,
+      id: id as string,
       user_id,
     });
 

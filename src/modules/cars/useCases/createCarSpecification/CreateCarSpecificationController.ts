@@ -11,7 +11,7 @@ class CreateCarSpecificationController {
     const createCarSpecificationUseCase = container.resolve(CreateCarSpecificationUseCase);
 
     const cars = await createCarSpecificationUseCase.execute({
-      car_id: id,
+      car_id: id as string,
       specifications_id,
     });
     return response.json(cars);

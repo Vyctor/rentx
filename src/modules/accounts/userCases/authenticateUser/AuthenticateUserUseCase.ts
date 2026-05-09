@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
+import { sign, SignOptions } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 
 import authConfig from '@config/auth.config';
@@ -51,7 +51,7 @@ class AuthenticateUserUseCase {
     const token = sign({}, secret_token, {
       subject: user.id,
       expiresIn: expires_in_token,
-    });
+    } as SignOptions);
 
     const refreshToken = sign(
       {
@@ -61,7 +61,7 @@ class AuthenticateUserUseCase {
       {
         subject: user.id,
         expiresIn: expires_in_refresh_token,
-      },
+      } as SignOptions,
     );
 
     const refreshTokenExpiresDate = this.dayjsDateProvider.addDays(expires_refresh_token_days);

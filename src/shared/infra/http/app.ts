@@ -12,10 +12,11 @@ import upload from '@config/upload';
 
 import swaggerFile from '../../../swagger.json';
 import { AppError } from '../../errors/AppError';
-import createConnection from '../typeorm';
+import { AppDataSource } from '../typeorm';
 import { router } from './routes';
 
-createConnection();
+// Initialize database connection
+AppDataSource.initialize().catch((error) => console.error('Database connection failed:', error));
 
 const app = express();
 

@@ -1,4 +1,4 @@
-import csvParse from 'csv-parse';
+import { parse } from 'csv-parse';
 import fs from 'fs';
 import { inject, injectable } from 'tsyringe';
 
@@ -21,7 +21,7 @@ class ImportCategoryUseCase {
       const stream = fs.createReadStream(file.path);
       const categories: Array<IImportCategory> = [];
 
-      const parseFile = csvParse();
+      const parseFile = parse();
 
       stream.pipe(parseFile);
 

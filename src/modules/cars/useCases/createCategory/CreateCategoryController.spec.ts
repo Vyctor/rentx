@@ -1,15 +1,19 @@
 import { hash } from 'bcryptjs';
 import request from 'supertest';
-import { Connection, createConnection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
+import { AppDataSource } from '@shared/infra/typeorm';
 import { app } from '@shared/infra/http/app';
 
-let connection: Connection;
+let connection: DataSource;
 
 describe('Create Category Controller', () => {
   beforeAll(async () => {
-    connection = await createConnection();
+    connection = AppDataSource;
+    if (!connection.isInitialized) {
+      await connection.initialize();
+    }
 
     await connection.runMigrations();
 
@@ -24,7 +28,7 @@ describe('Create Category Controller', () => {
 
   afterAll(async () => {
     await connection.dropDatabase();
-    await connection.close();
+    await connection.destroy();
   });
 
   it('should be able create a new category', async () => {

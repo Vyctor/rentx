@@ -1,4 +1,4 @@
-import { verify, sign } from 'jsonwebtoken';
+import { verify, sign, SignOptions } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 
 import authConfig from '@config/auth.config';
@@ -42,8 +42,8 @@ class RefreshTokenUseCase {
 
     const refreshToken = sign({ email }, authConfig.secret_refresh_token, {
       subject: sub,
-      expiresIn: authConfig.expires_refresh_token_days,
-    });
+      expiresIn: '30d',
+    } as SignOptions);
 
     await this.usersTokensRepository.create({
       expires_date: refreshTokenExpiresDate,
@@ -54,7 +54,7 @@ class RefreshTokenUseCase {
     const newToken = sign({}, authConfig.secret_token, {
       subject: userId,
       expiresIn: authConfig.expires_in_token,
-    });
+    } as SignOptions);
 
     return {
       refresh_token: refreshToken,
